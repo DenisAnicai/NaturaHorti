@@ -1,6 +1,7 @@
 import dotenv
 import os
 import mimetypes
+
 mimetypes.add_type("text/css", ".css", True)
 mimetypes.add_type("text/javascript", ".js", True)
 
@@ -144,7 +145,7 @@ CORS_ALLOWED_ORIGINS = [
 
 ]
 
-CSRF_TRUSTED_ORIGINS=[
-    'https://naturahorti-l4txenzd6a-oc.a.run.app/',
-    'http://localhost:8000/',
+CSRF_TRUSTED_ORIGINS = [
+    'https://naturahorti-l4txenzd6a-oc.a.run.app',
+    'http://localhost:8000',
 ]
