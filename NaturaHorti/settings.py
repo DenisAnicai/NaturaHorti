@@ -1,5 +1,8 @@
 import dotenv
 import os
+import mimetypes
+mimetypes.add_type("text/css", ".css", True)
+mimetypes.add_type("text/javascript", ".js", True)
 
 dotenv.load_dotenv(override=True)
 
@@ -120,8 +123,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/Frontend/static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'Frontend/build',
+    BASE_DIR / 'Frontend/templates/frontend'
+]
 
 MEDIA_ROOT = BASE_DIR / 'static/images'
 
