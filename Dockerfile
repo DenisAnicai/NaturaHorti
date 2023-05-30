@@ -13,7 +13,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
 
-# Run gunicorn when the container launches
-CMD ["python", "manage.py", "makemigrations"]
-CMD ["python", "manage.py", "migrate"]
+# Apply migrations before running the server
+RUN python manage.py makemigrations
+RUN python manage.py migrate
+
+# Start the Django development server
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
