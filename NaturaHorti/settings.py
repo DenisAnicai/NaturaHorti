@@ -143,3 +143,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
 
 ]
+
+CSRF_TRUSTED_ORIGINS=[
+    'https://naturahorti-l4txenzd6a-oc.a.run.app/',
+    'http://localhost:8000/',
+]
