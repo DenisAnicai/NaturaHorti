@@ -50,7 +50,6 @@ def update_user_profile(request):
         user.first_name = data['name']
         user.username = data['email']
         user.email = data['email']
-        user.phone = data['phone']
 
         password = data['password']
         try:
