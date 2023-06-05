@@ -18,7 +18,7 @@ const axios_1 = __importDefault(require("axios"));
 const listProducts = () => (dispatch) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         dispatch({ type: productConstants_1.PRODUCT_LIST_REQUEST });
-        const { data } = yield axios_1.default.get('/api/products');
+        const { data } = yield axios_1.default.get('/api/products/');
         dispatch({ type: productConstants_1.PRODUCT_LIST_SUCCESS, payload: data });
     }
     catch (error) {

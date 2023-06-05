@@ -159,7 +159,7 @@ export const ProductScreen = () => {
                                     <ListGroup.Item>
                                         <div className="text-center">
                                         <span>
-                                            <Price price={product?.price} textSize={1.0}/>
+                                            <Price price={Number(product?.price)} textSize={1.0}/>
                                         </span>
                                         </div>
                                     </ListGroup.Item>

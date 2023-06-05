@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addToCart = exports.updateCartItem = exports.removeFromCart = exports.getCartItems = exports.fetchCartItems = void 0;
+exports.clearCart = exports.updatePersonalDetails = exports.updatePaymentMethod = exports.updateShipping = exports.addToCart = exports.updateCartItem = exports.removeFromCart = exports.getCartItems = exports.fetchCartItems = void 0;
 const axios_1 = __importDefault(require("axios"));
 const cartConstants_1 = require("../constants/cartConstants");
 const fetchCartItems = () => (dispatch, getState) => __awaiter(void 0, void 0, void 0, function* () {
@@ -74,3 +74,35 @@ const addToCart = (id, qty) => (dispatch, getState) => __awaiter(void 0, void 0,
     localStorage.setItem("cartItems", JSON.stringify(getState().cart.cartItems));
 });
 exports.addToCart = addToCart;
+const updateShipping = (data) => (dispatch) => {
+    dispatch({
+        type: 'CART_SAVE_SHIPPING_ADDRESS',
+        payload: data
+    });
+    localStorage.setItem("shippingAddress", JSON.stringify(data));
+};
+exports.updateShipping = updateShipping;
+const updatePaymentMethod = (data) => (dispatch) => {
+    dispatch({
+        type: 'CART_SAVE_PAYMENT_METHOD',
+        payload: data
+    });
+    localStorage.setItem("paymentMethod", data);
+};
+exports.updatePaymentMethod = updatePaymentMethod;
+const updatePersonalDetails = (data) => (dispatch) => {
+    dispatch({
+        type: cartConstants_1.CART_SAVE_PERSONAL_DETAILS,
+        payload: data
+    });
+    localStorage.setItem("personalDetails", JSON.stringify(data));
+};
+exports.updatePersonalDetails = updatePersonalDetails;
+const clearCart = () => (dispatch) => {
+    dispatch({
+        type: cartConstants_1.CART_CLEAR_ITEMS,
+    });
+    localStorage.setItem("cartItems", JSON.stringify([]));
+    console.log("Cart cleared");
+};
+exports.clearCart = clearCart;

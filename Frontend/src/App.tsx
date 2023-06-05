@@ -11,6 +11,12 @@ import {NotFoundScreen} from "./screens/NotFoundScreen";
 import {LoginScreen} from "./screens/LoginScreen";
 import {RegisterScreen} from "./screens/RegisterScreen";
 import {CartScreen} from "./screens/CartScreen";
+import {ProfileScreen} from "./screens/ProfileScreen";
+import {ShippingScreen} from "./screens/ShippingScreen";
+import {PaymentScreen} from "./screens/PaymentScreen";
+import {PersonalDetailsScreen} from "./screens/PersonalDetailsScreen";
+import {OrderSummaryScreen} from "./screens/OrderScreen";
+import {OrderSuccessScreen} from "./screens/OrderSuccessScreen";
 
 import { Provider } from 'react-redux'
 import { store } from './store'
@@ -35,7 +41,14 @@ const App: React.FC = () => {
                     <Route path='*' element={<NotFoundScreen/>}/>
                     <Route path='/login' element={<LoginScreen/>}/>
                     <Route path='/register' element={<RegisterScreen/>}/>
+                    <Route path='/profile' element={<ProfileScreen/>}/>
                     <Route path='/cart/:_id?' element={<CartScreen/>}/>
+                    <Route path='/logout' element={<HomeScreen/>}/>
+                    <Route path='/cart/shipping' element={<ShippingScreen/>}/>
+                    <Route path='/cart/personalDetails' element={<PersonalDetailsScreen/>}/>
+                    <Route path='/cart/payment' element={<PaymentScreen/>}/>
+                    <Route path='/cart/placeOrder' element={<OrderSummaryScreen/>}/>
+                    <Route path='/cart/order/:orderId' element={<OrderSuccessScreen/>}/>
                 </Routes>
             </main>
             <Footer/>

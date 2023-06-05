@@ -35,17 +35,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LoginScreen = void 0;
 const react_1 = __importStar(require("react"));
 const react_bootstrap_1 = require("react-bootstrap");
+const react_redux_1 = require("react-redux");
+const userActions_1 = require("../actions/userActions");
+const react_router_dom_1 = require("react-router-dom");
 const LoginScreen = () => {
     const [email, setEmail] = (0, react_1.useState)('');
     const [password, setPassword] = (0, react_1.useState)('');
-    const [loading, setLoading] = (0, react_1.useState)(false);
-    const [error, setError] = (0, react_1.useState)(null);
+    const dispatch = (0, react_redux_1.useDispatch)();
+    const navigate = (0, react_router_dom_1.useNavigate)();
+    const userLogin = (0, react_redux_1.useSelector)((state) => state.userLogin);
+    const { loading, error, userInfo } = userLogin;
+    (0, react_1.useEffect)(() => {
+        if (userInfo) {
+            // wait 2 seconds then redirect to home page
+            setTimeout(() => {
+                navigate('/');
+            }, 2000);
+        }
+    }, [navigate, userInfo]);
     const handleLogin = (e) => __awaiter(void 0, void 0, void 0, function* () {
         e.preventDefault();
-        setLoading(true);
-        setError(null);
-        // TODO: Implement your login logic here. Use the setEmail and setPassword states.
-        setLoading(false);
+        try {
+            yield dispatch((0, userActions_1.login)(email, password));
+        }
+        catch (err) {
+            // Error handling here...
+        }
     });
     return (react_1.default.createElement(react_bootstrap_1.Container, { className: "my-5" },
         react_1.default.createElement(react_bootstrap_1.Row, { className: "justify-content-md-center" },
@@ -53,7 +68,10 @@ const LoginScreen = () => {
                 react_1.default.createElement(react_bootstrap_1.Card, { className: "p-4" },
                     react_1.default.createElement("h3", { className: "text-center mb-4" }, "Login"),
                     loading ? (react_1.default.createElement("div", { className: "text-center" },
-                        react_1.default.createElement("i", { className: "fa-solid fa-spinner fa-spin", style: { fontSize: "2rem", color: "#6cb95c" } }))) : error ? (react_1.default.createElement("div", { className: "alert alert-danger", role: "alert" }, error)) : null,
+                        react_1.default.createElement("i", { className: "fa-solid fa-spinner fa-spin", style: { fontSize: "2rem", color: "#6cb95c" } }))) : error ? (react_1.default.createElement("div", { className: "alert alert-danger", role: "alert" }, error)) : userInfo ? (react_1.default.createElement("div", { className: "alert alert-success", role: "alert" },
+                        "Autentificare cu succes! Bun venit, ",
+                        userInfo.name,
+                        "!")) : null,
                     react_1.default.createElement(react_bootstrap_1.Form, { onSubmit: handleLogin },
                         react_1.default.createElement(react_bootstrap_1.Form.Group, { className: "mb-3" },
                             react_1.default.createElement(react_bootstrap_1.Form.Label, null, "Email"),

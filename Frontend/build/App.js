@@ -37,6 +37,12 @@ const NotFoundScreen_1 = require("./screens/NotFoundScreen");
 const LoginScreen_1 = require("./screens/LoginScreen");
 const RegisterScreen_1 = require("./screens/RegisterScreen");
 const CartScreen_1 = require("./screens/CartScreen");
+const ProfileScreen_1 = require("./screens/ProfileScreen");
+const ShippingScreen_1 = require("./screens/ShippingScreen");
+const PaymentScreen_1 = require("./screens/PaymentScreen");
+const PersonalDetailsScreen_1 = require("./screens/PersonalDetailsScreen");
+const OrderScreen_1 = require("./screens/OrderScreen");
+const OrderSuccessScreen_1 = require("./screens/OrderSuccessScreen");
 const react_redux_1 = require("react-redux");
 const store_1 = require("./store");
 const App = () => {
@@ -49,7 +55,14 @@ const App = () => {
                 React.createElement(react_router_dom_1.Route, { path: '*', element: React.createElement(NotFoundScreen_1.NotFoundScreen, null) }),
                 React.createElement(react_router_dom_1.Route, { path: '/login', element: React.createElement(LoginScreen_1.LoginScreen, null) }),
                 React.createElement(react_router_dom_1.Route, { path: '/register', element: React.createElement(RegisterScreen_1.RegisterScreen, null) }),
-                React.createElement(react_router_dom_1.Route, { path: '/cart/:_id?', element: React.createElement(CartScreen_1.CartScreen, null) }))),
+                React.createElement(react_router_dom_1.Route, { path: '/profile', element: React.createElement(ProfileScreen_1.ProfileScreen, null) }),
+                React.createElement(react_router_dom_1.Route, { path: '/cart/:_id?', element: React.createElement(CartScreen_1.CartScreen, null) }),
+                React.createElement(react_router_dom_1.Route, { path: '/logout', element: React.createElement(HomeScreen_1.HomeScreen, null) }),
+                React.createElement(react_router_dom_1.Route, { path: '/cart/shipping', element: React.createElement(ShippingScreen_1.ShippingScreen, null) }),
+                React.createElement(react_router_dom_1.Route, { path: '/cart/personalDetails', element: React.createElement(PersonalDetailsScreen_1.PersonalDetailsScreen, null) }),
+                React.createElement(react_router_dom_1.Route, { path: '/cart/payment', element: React.createElement(PaymentScreen_1.PaymentScreen, null) }),
+                React.createElement(react_router_dom_1.Route, { path: '/cart/placeOrder', element: React.createElement(OrderScreen_1.OrderSummaryScreen, null) }),
+                React.createElement(react_router_dom_1.Route, { path: '/cart/order/:orderId', element: React.createElement(OrderSuccessScreen_1.OrderSuccessScreen, null) }))),
         React.createElement(footer_1.Footer, null)));
 };
 const root = client_1.default.createRoot(document.getElementById('app'));

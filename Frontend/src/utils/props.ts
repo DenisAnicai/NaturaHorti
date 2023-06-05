@@ -36,3 +36,10 @@ export interface RootStateProp {
   productDetails: ProductDetailsStateProp;
   cart: CartStateProp;
 }
+
+export interface ShippingAddressProp {
+    address: string;
+    city: string;
+    postalCode: string;
+    country: string;
+}

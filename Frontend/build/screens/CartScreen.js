@@ -9,6 +9,7 @@ const react_router_dom_1 = require("react-router-dom");
 const react_bootstrap_1 = require("react-bootstrap");
 const react_redux_1 = require("react-redux");
 const cartActions_1 = require("../actions/cartActions");
+const react_router_dom_2 = require("react-router-dom");
 const price_1 = require("../components/price");
 const styled_components_1 = __importDefault(require("styled-components"));
 const CartScreen = () => {
@@ -34,8 +35,14 @@ const CartScreen = () => {
       margin: 10px 0;
     `;
     const dispatch = (0, react_redux_1.useDispatch)();
+    const navigate = (0, react_router_dom_2.useNavigate)();
     const cart = (0, react_redux_1.useSelector)((state) => state.cart);
     let { cartItems } = cart;
+    const subtotal = parseFloat((cartItems.reduce((acc, item) => acc + item.qty * item.price, 0)).toFixed(2));
+    const TAX_RATE = 0.19;
+    const SHIPPING_COST = subtotal > 300 ? 0 : 25.00;
+    const tax = parseFloat((subtotal * TAX_RATE).toFixed(2));
+    const total = subtotal + tax + SHIPPING_COST;
     const removeFromCartHandler = (id) => {
         dispatch((0, cartActions_1.removeFromCart)(id));
     };
@@ -43,7 +50,7 @@ const CartScreen = () => {
         dispatch((0, cartActions_1.updateCartItem)(id, qty));
     };
     const checkoutHandler = () => {
-        // Implement checkout functionality here
+        navigate('/cart/shipping');
     };
     return (react_1.default.createElement(react_bootstrap_1.Container, null,
         react_1.default.createElement(react_bootstrap_1.Row, { className: "my-3" },
@@ -66,7 +73,8 @@ const CartScreen = () => {
                         react_1.default.createElement(react_router_dom_1.Link, { to: `/product/${item.name}/${item.product}`, style: { fontSize: "1.2em" }, className: "text-decoration-none  text-center hover-effect m-auto" },
                             react_1.default.createElement("strong", null, item.name))),
                     react_1.default.createElement(react_bootstrap_1.Col, { xs: 12, md: 5, className: "d-flex flex-column justify-content-center m-auto" },
-                        react_1.default.createElement(price_1.Price, { price: item.price, textSize: 0.9 }),
+                        react_1.default.createElement("span", null,
+                            react_1.default.createElement(price_1.Price, { price: Number(item.price), textSize: 0.9 })),
                         react_1.default.createElement(react_bootstrap_1.Row, { className: "mt-2" },
                             react_1.default.createElement(react_bootstrap_1.Col, { xs: 6, md: 6, style: { maxWidth: "100px" } },
                                 react_1.default.createElement(react_bootstrap_1.Form.Control, { className: "text-center m-auto", style: { maxWidth: "100%" }, as: "select", value: item.qty, onChange: (e) => updateCartHandler(item.product, Number(e.target.value)) }, [...Array(item.countInStock).keys()].map(x => (react_1.default.createElement("option", { key: x + 1, value: x + 1 }, x + 1))))),
@@ -78,11 +86,38 @@ const CartScreen = () => {
                 react_1.default.createElement(react_bootstrap_1.Card, null,
                     react_1.default.createElement(react_bootstrap_1.ListGroup, { variant: 'flush', className: "text-center" },
                         react_1.default.createElement(react_bootstrap_1.ListGroup.Item, null,
-                            react_1.default.createElement("h2", null, "Subtotal produse"),
-                            react_1.default.createElement(price_1.Price, { price: parseFloat((cartItems.reduce((acc, item) => acc + item.qty * item.price, 0)).toFixed(2)) })),
+                            react_1.default.createElement("h4", null, "Calcul Pret")),
                         react_1.default.createElement(react_bootstrap_1.ListGroup.Item, null,
-                            react_1.default.createElement(react_bootstrap_1.Button, { type: 'button', className: 'btn-block', disabled: cartItems.length === 0, onClick: checkoutHandler },
+                            react_1.default.createElement(react_bootstrap_1.Row, { className: "d-flex align-items-center" },
+                                react_1.default.createElement(react_bootstrap_1.Col, null, "Subtotal produse:"),
+                                react_1.default.createElement(react_bootstrap_1.Col, null,
+                                    react_1.default.createElement("strong", null,
+                                        react_1.default.createElement(price_1.Price, { price: subtotal, textSize: 0.7 }))))),
+                        react_1.default.createElement(react_bootstrap_1.ListGroup.Item, null,
+                            react_1.default.createElement(react_bootstrap_1.Row, { className: "d-flex align-items-center" },
+                                react_1.default.createElement(react_bootstrap_1.Col, null, "TVA (19%):"),
+                                react_1.default.createElement(react_bootstrap_1.Col, null,
+                                    react_1.default.createElement("strong", null,
+                                        react_1.default.createElement(price_1.Price, { price: tax, textSize: 0.7 }))))),
+                        react_1.default.createElement(react_bootstrap_1.ListGroup.Item, null,
+                            react_1.default.createElement(react_bootstrap_1.Row, { className: "d-flex align-items-center" },
+                                react_1.default.createElement(react_bootstrap_1.Col, null, "Cost transport:"),
+                                react_1.default.createElement(react_bootstrap_1.Col, null,
+                                    react_1.default.createElement("strong", null,
+                                        react_1.default.createElement(price_1.Price, { price: SHIPPING_COST, textSize: 0.7 }))))),
+                        react_1.default.createElement(react_bootstrap_1.ListGroup.Item, null,
+                            react_1.default.createElement("hr", null)),
+                        react_1.default.createElement(react_bootstrap_1.ListGroup.Item, null,
+                            react_1.default.createElement(react_bootstrap_1.Row, { className: "d-flex align-items-center" },
+                                react_1.default.createElement(react_bootstrap_1.Col, null,
+                                    react_1.default.createElement("h4", null, "Total:")),
+                                react_1.default.createElement(react_bootstrap_1.Col, null,
+                                    react_1.default.createElement("h4", null,
+                                        react_1.default.createElement("span", null,
+                                            react_1.default.createElement(price_1.Price, { price: total, textSize: 1.2 })))))),
+                        react_1.default.createElement(react_bootstrap_1.ListGroup.Item, null,
+                            react_1.default.createElement(react_bootstrap_1.Button, { type: 'button', className: 'btn-success', disabled: cartItems.length === 0, onClick: checkoutHandler },
                                 react_1.default.createElement("i", { className: 'fas fa-shopping-cart' }),
-                                " Proceed To Checkout"))))))));
+                                " Finalizare comanda"))))))));
 };
 exports.CartScreen = CartScreen;

@@ -5,34 +5,46 @@ import {listProducts} from '../actions/productActions'
 import {ProductProp} from "../utils/props";
 import {useDispatch, useSelector} from 'react-redux'
 import styled from "styled-components";
+import {useLocation, useNavigate} from "react-router-dom";
+
+import {logout} from "../actions/userActions";
 
 const StyledCol = styled(Col)`
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 `;
 
 const StyledImage = styled.img`
-    width: 100%;
-    height: auto;
-    object-fit: cover;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
 `;
 
 const ErrorContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 5rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 5rem 0;
 `;
 
 export const HomeScreen = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const productList = useSelector((state: any) => state.productList)
 
     const {loading, error, products} = productList
 
+    const location = useLocation();
+
     useEffect(() => {
+            if (location.pathname.endsWith('logout'))
+            {
+                dispatch<any>(logout());
+                alert('Deconectare cu succes!')
+                navigate('/')
+            }
             dispatch<any>(listProducts())
-        }, [dispatch]
+        }, [dispatch, location]
     )
 
     return (

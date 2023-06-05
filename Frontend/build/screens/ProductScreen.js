@@ -146,7 +146,7 @@ const ProductScreen = () => {
                         react_1.default.createElement(react_bootstrap_1.ListGroup.Item, null,
                             react_1.default.createElement("div", { className: "text-center" },
                                 react_1.default.createElement("span", null,
-                                    react_1.default.createElement(price_1.Price, { price: product === null || product === void 0 ? void 0 : product.price, textSize: 1.0 })))),
+                                    react_1.default.createElement(price_1.Price, { price: Number(product === null || product === void 0 ? void 0 : product.price), textSize: 1.0 })))),
                         react_1.default.createElement(react_bootstrap_1.ListGroup.Item, null,
                             react_1.default.createElement("div", { className: "text-center" }, (product === null || product === void 0 ? void 0 : product.countInStock) > 0 ? (react_1.default.createElement("span", { style: { color: "#6cb95c" } },
                                 react_1.default.createElement("i", { className: "fa-solid fa-boxes-stacked" }),

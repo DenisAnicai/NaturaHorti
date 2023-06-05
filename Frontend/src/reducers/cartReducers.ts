@@ -1,10 +1,31 @@
-import {CART_ADD_ITEM, CART_REMOVE_ITEM, CART_UPDATE_ITEM, CART_GET_ITEMS} from "../constants/cartConstants";
+import {
+    CART_ADD_ITEM,
+    CART_REMOVE_ITEM,
+    CART_UPDATE_ITEM,
+    CART_GET_ITEMS,
+    CART_SAVE_SHIPPING_ADDRESS,
+    CART_SAVE_PAYMENT_METHOD,
+    CART_SAVE_PERSONAL_DETAILS,
+    CART_CLEAR_ITEMS
+} from "../constants/cartConstants";
 
 export const cartReducer = (state = {
     cartItems: [{
         product: '',
         quantity: 0
-    }]
+    }],
+    shippingAddress: {
+        address: '',
+        city: '',
+        postalCode: '',
+        country: ''
+    },
+    paymentMethod: '',
+    personalDetails: {
+        Name: '',
+        Email: '',
+        Phone: '',
+    }
 }, action: any) => {
 
     switch (action.type) {
@@ -45,6 +66,26 @@ export const cartReducer = (state = {
             return {
                 ...state,
             };
+        case CART_SAVE_SHIPPING_ADDRESS:
+            return {
+                ...state,
+                shippingAddress: action.payload
+            }
+        case CART_SAVE_PAYMENT_METHOD:
+            return {
+                ...state,
+                paymentMethod: action.payload
+            }
+        case CART_SAVE_PERSONAL_DETAILS:
+            return {
+                ...state,
+                personalDetails: action.payload
+            }
+        case CART_CLEAR_ITEMS:
+            return {
+                ...state,
+                cartItems: []
+            }
         default:
             return state;
     }

@@ -33,27 +33,36 @@ const react_bootstrap_1 = require("react-bootstrap");
 const productActions_1 = require("../actions/productActions");
 const react_redux_1 = require("react-redux");
 const styled_components_1 = __importDefault(require("styled-components"));
+const react_router_dom_1 = require("react-router-dom");
+const userActions_1 = require("../actions/userActions");
 const StyledCol = (0, styled_components_1.default)(react_bootstrap_1.Col) `
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 `;
 const StyledImage = styled_components_1.default.img `
-    width: 100%;
-    height: auto;
-    object-fit: cover;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
 `;
 const ErrorContainer = styled_components_1.default.div `
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 5rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 5rem 0;
 `;
 const HomeScreen = () => {
     const dispatch = (0, react_redux_1.useDispatch)();
+    const navigate = (0, react_router_dom_1.useNavigate)();
     const productList = (0, react_redux_1.useSelector)((state) => state.productList);
     const { loading, error, products } = productList;
+    const location = (0, react_router_dom_1.useLocation)();
     (0, react_1.useEffect)(() => {
+        if (location.pathname.endsWith('logout')) {
+            dispatch((0, userActions_1.logout)());
+            alert('Deconectare cu succes!');
+            navigate('/');
+        }
         dispatch((0, productActions_1.listProducts)());
-    }, [dispatch]);
+    }, [dispatch, location]);
     return (react_1.default.createElement(react_bootstrap_1.Container, null,
         react_1.default.createElement("h1", null, "Produse noi"),
         loading ? (react_1.default.createElement("div", { className: "text-center my-5" },

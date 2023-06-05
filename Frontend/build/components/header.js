@@ -13,6 +13,8 @@ const Header = () => {
     const cart = (0, react_redux_1.useSelector)((state) => state.cart);
     const { cartItems } = cart;
     const cartItemsCount = cartItems.length;
+    const userLogin = (0, react_redux_1.useSelector)((state) => state.userLogin);
+    const { userInfo } = userLogin;
     return (react_1.default.createElement("header", null,
         react_1.default.createElement(react_bootstrap_1.Navbar, { style: { backgroundColor: 'rgb(61,140,64)' }, variant: "dark", expand: "lg", collapseOnSelect: true, className: "" },
             react_1.default.createElement(react_bootstrap_1.Container, null,
@@ -21,9 +23,20 @@ const Header = () => {
                 react_1.default.createElement(react_bootstrap_1.Navbar.Toggle, { "aria-controls": "basic-navbar-nav" }),
                 react_1.default.createElement(react_bootstrap_1.Navbar.Collapse, { id: "basic-navbar-nav" },
                     react_1.default.createElement(react_bootstrap_1.Nav, { className: "ms-auto" },
-                        react_1.default.createElement(react_bootstrap_1.Nav.Link, { as: react_router_dom_1.Link, to: "/login" },
-                            react_1.default.createElement("i", { className: "fas fa-user" }),
-                            " Autentificare"),
+                        userInfo ? (react_1.default.createElement(react_1.default.Fragment, null,
+                            react_1.default.createElement(react_bootstrap_1.Nav.Link, { as: react_router_dom_1.Link, to: "/profile" },
+                                react_1.default.createElement("i", { className: "fas fa-user" }),
+                                " ",
+                                userInfo.name),
+                            react_1.default.createElement(react_bootstrap_1.Nav.Link, { as: react_router_dom_1.Link, to: "/logout" },
+                                react_1.default.createElement("i", { className: "fas fa-sign-out-alt" }),
+                                " Deconectare"))) : (react_1.default.createElement(react_1.default.Fragment, null,
+                            react_1.default.createElement(react_bootstrap_1.Nav.Link, { as: react_router_dom_1.Link, to: "/login" },
+                                react_1.default.createElement("i", { className: "fas fa-user" }),
+                                " Autentificare"),
+                            react_1.default.createElement(react_bootstrap_1.Nav.Link, { as: react_router_dom_1.Link, to: "/register" },
+                                react_1.default.createElement("i", { className: "fas fa-user-plus" }),
+                                " Inregistrare"))),
                         react_1.default.createElement(react_bootstrap_1.Nav.Link, { as: react_router_dom_1.Link, to: "/cart" },
                             react_1.default.createElement("i", { className: "fas fa-shopping-cart" }),
                             "Cos",

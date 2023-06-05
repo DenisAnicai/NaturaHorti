@@ -35,7 +35,7 @@ export const Product: React.FC<ProductProp> = ({
                             <Rating rating={rating} numReviews={numReviews}/>
                         </div>
                     </Card.Text>
-                    <Price price={price} textSize={0.9}/>
+                    <Price price={Number(price)} textSize={0.9}/>
                     <div className="text-center mt-2" style={{fontSize: "0.8em"}}>
                         {countInStock > 0 ? (
                             <span style={{color: "#6cb95c"}}>

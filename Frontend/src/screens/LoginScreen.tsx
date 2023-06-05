@@ -1,67 +1,89 @@
-import React, { useState } from 'react';
-import { Button, Card, Container, Form, Row, Col } from "react-bootstrap";
+import React, {useState, useEffect} from 'react';
+import {Button, Card, Container, Form, Row, Col} from "react-bootstrap";
+import {useDispatch, useSelector} from "react-redux";
+
+import {login} from "../actions/userActions";
+import {useNavigate} from 'react-router-dom';
 
 export const LoginScreen: React.FC = () => {
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
 
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+    const userLogin = useSelector((state: any) => state.userLogin)
+    const {loading, error, userInfo} = userLogin;
 
-    // TODO: Implement your login logic here. Use the setEmail and setPassword states.
+    useEffect(() => {
+        if (userInfo) {
+            // wait 2 seconds then redirect to home page
+            setTimeout(() => {
+                    navigate('/');
+                }
+                , 2000);
+        }
+    }, [navigate, userInfo]);
 
-    setLoading(false);
-  };
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
 
-  return (
-    <Container className="my-5">
-      <Row className="justify-content-md-center">
-        <Col xs={12} md={6}>
-          <Card className="p-4">
-            <h3 className="text-center mb-4">Login</h3>
-            {loading ? (
-              <div className="text-center">
-                <i className="fa-solid fa-spinner fa-spin" style={{ fontSize: "2rem", color: "#6cb95c" }} />
-              </div>
-            ) : error ? (
-              <div className="alert alert-danger" role="alert">
-                {error}
-              </div>
-            ) : null}
-            <Form onSubmit={handleLogin}>
-              <Form.Group className="mb-3">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="Enter email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </Form.Group>
+        try {
+            await dispatch<any>(login(email, password));
+        } catch (err: any) {
+            // Error handling here...
+        }
+    };
 
-              <Form.Group className="mb-3">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </Form.Group>
-              <Button variant="primary" type="submit" className="w-100">
-                Login
-              </Button>
-            </Form>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
-  );
+    return (
+        <Container className="my-5">
+            <Row className="justify-content-md-center">
+                <Col xs={12} md={6}>
+                    <Card className="p-4">
+                        <h3 className="text-center mb-4">Login</h3>
+                        {loading ? (
+                            <div className="text-center">
+                                <i className="fa-solid fa-spinner fa-spin"
+                                   style={{fontSize: "2rem", color: "#6cb95c"}}/>
+                            </div>
+                        ) : error ? (
+                            <div className="alert alert-danger" role="alert">
+                                {error}
+                            </div>
+                        ) : userInfo ? (
+                            <div className="alert alert-success" role="alert">
+                                Autentificare cu succes! Bun venit, {userInfo.name}!
+                            </div>
+                        ) : null}
+                        <Form onSubmit={handleLogin}>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control
+                                    type="email"
+                                    placeholder="Enter email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                            </Form.Group>
+
+                            <Form.Group className="mb-3">
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control
+                                    type="password"
+                                    placeholder="Password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                            </Form.Group>
+                            <Button variant="primary" type="submit" className="w-100">
+                                Login
+                            </Button>
+                        </Form>
+                    </Card>
+                </Col>
+            </Row>
+        </Container>
+    );
 }

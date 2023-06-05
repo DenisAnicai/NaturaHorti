@@ -7,19 +7,6 @@ import {
     PRODUCT_DETAILS_FAIL,
 } from "../constants/productConstants";
 
-const sample_product = {
-    _id: '1',
-    name: 'Sample Product',
-    image: '/images/sample.jpg',
-    description: 'Sample Description',
-    brand: 'Sample Brand',
-    category: 'Sample Category',
-    price: 0,
-    countInStock: 0,
-    rating: 0,
-    numReviews: 0,
-}
-
 export const productListReducer = (state = { products: [] }, action: any) => {
   switch (action.type) {
     case PRODUCT_LIST_REQUEST:

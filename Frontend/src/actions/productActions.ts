@@ -14,7 +14,7 @@ import {ProductProp} from "../utils/props";
 export const listProducts = () => async (dispatch: any): Promise<void> => {
     try {
         dispatch({ type: PRODUCT_LIST_REQUEST });
-        const { data } = await axios.get<ProductProp[]>('/api/products');
+        const { data } = await axios.get<ProductProp[]>('/api/products/');
         dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
     } catch (error: any) {
         dispatch({
