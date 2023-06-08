@@ -1,7 +1,6 @@
 import React from "react";
 
-export const Rating = ({rating, numReviews}: { rating: any, numReviews: number }) => {
-
+export const Rating = ({rating, numReviews, showNumReviews}: { rating: any, numReviews?: number, showNumReviews?: boolean }) => {
     rating = Number(rating);
 
     const renderStars = () => {
@@ -27,8 +26,8 @@ export const Rating = ({rating, numReviews}: { rating: any, numReviews: number }
 
     return (
         <div className="mb-4 py-2" style={{height: "1.5rem"}}>
-            {renderStars()} <span className="fw-semibold">{rating}</span>
-            <span className="text-secondary"> ({numReviews})</span>
+            { renderStars() } { showNumReviews && <span className="fw-semibold">{rating}</span> }
+            { showNumReviews && numReviews && <span className="text-secondary"> ({numReviews})</span> }
         </div>
     );
 };

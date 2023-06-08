@@ -40,6 +40,8 @@ const cartActions_1 = require("../actions/cartActions");
 const notificationModal_1 = __importDefault(require("../components/notificationModal"));
 const stockExceededModal_1 = require("../components/stockExceededModal");
 const react_router_dom_2 = require("react-router-dom");
+const ReviewList_1 = __importDefault(require("../components/ReviewList"));
+const ReviewForm_1 = __importDefault(require("../components/ReviewForm"));
 const ProductScreen = () => {
     var _a, _b;
     const { _id } = (0, react_router_dom_1.useParams)();
@@ -50,6 +52,8 @@ const ProductScreen = () => {
     }
     const dispatch = (0, react_redux_1.useDispatch)();
     const productDetails = (0, react_redux_1.useSelector)((state) => state.productDetails);
+    const reviewList = (0, react_redux_1.useSelector)((state) => state.productReviewsList);
+    const { reviews } = reviewList;
     const cart = (0, react_redux_1.useSelector)((state) => state.cart);
     const { cartItems } = cart;
     const { loading, error, product } = productDetails;
@@ -114,7 +118,7 @@ const ProductScreen = () => {
             react_1.default.createElement(react_bootstrap_1.Col, { md: 5 },
                 react_1.default.createElement(react_bootstrap_1.ListGroup, { variant: "flush" },
                     react_1.default.createElement(react_bootstrap_1.ListGroup.Item, null,
-                        react_1.default.createElement(rating_1.Rating, { rating: product === null || product === void 0 ? void 0 : product.rating, numReviews: product.numReviews }),
+                        react_1.default.createElement(rating_1.Rating, { rating: product === null || product === void 0 ? void 0 : product.rating, numReviews: product.numReviews, showNumReviews: true }),
                         react_1.default.createElement(recommendedPercentage_1.RecommendedPercentage, { rating: product === null || product === void 0 ? void 0 : product.rating })),
                     react_1.default.createElement(react_bootstrap_1.ListGroup.Item, null,
                         react_1.default.createElement("div", null,
@@ -164,6 +168,13 @@ const ProductScreen = () => {
         react_1.default.createElement(react_bootstrap_1.Row, null,
             react_1.default.createElement(react_bootstrap_1.Col, { md: 9, className: "my-5" },
                 react_1.default.createElement("h4", null, "Descriere"),
-                react_1.default.createElement("p", null, product === null || product === void 0 ? void 0 : product.description)))))));
+                react_1.default.createElement("p", null, product === null || product === void 0 ? void 0 : product.description))),
+        react_1.default.createElement(react_bootstrap_1.Row, null,
+            react_1.default.createElement(react_bootstrap_1.Col, { md: 9, className: "my-5" },
+                react_1.default.createElement("h4", { className: "my-3" }, "Recenzii"),
+                react_1.default.createElement(ReviewList_1.default, { productId: _id }),
+                react_1.default.createElement("hr", null),
+                react_1.default.createElement("h4", null, "Adauga o recenzie"),
+                react_1.default.createElement(ReviewForm_1.default, { productId: _id })))))));
 };
 exports.ProductScreen = ProductScreen;

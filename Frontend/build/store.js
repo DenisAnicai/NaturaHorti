@@ -19,7 +19,9 @@ const rootReducer = (0, toolkit_1.combineReducers)({
     userRegister: userReducers_1.userRegisterReducer,
     orderCreate: orderReducers_1.orderCreateReducer,
     orderList: orderReducers_1.orderListReducer,
-    orderPay: orderReducers_1.orderPayReducer
+    orderPay: orderReducers_1.orderPayReducer,
+    productReviewCreate: productReducers_1.productReviewCreateReducer,
+    productReviewsList: productReducers_1.productReviewsListReducer,
 });
 const cartItemsFromStorage = localStorage.getItem('cartItems') ?
     JSON.parse(localStorage.getItem('cartItems')) : [];

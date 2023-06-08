@@ -15,6 +15,9 @@ import {StockExceededModal} from "../components/stockExceededModal";
 
 import {useNavigate} from 'react-router-dom';
 
+import ReviewList from '../components/ReviewList';
+import ReviewForm from '../components/ReviewForm';
+
 export const ProductScreen = () => {
     const {_id} = useParams<{ _id: string }>();
     const [quantity, setQuantity] = useState<string>("1");
@@ -27,6 +30,8 @@ export const ProductScreen = () => {
     const dispatch = useDispatch();
 
     const productDetails = useSelector((state: any) => state.productDetails);
+    const reviewList = useSelector((state: any) => state.productReviewsList);
+    const {reviews} = reviewList;
 
     const cart = useSelector((state: any) => state.cart);
     const {cartItems} = cart;
@@ -38,6 +43,7 @@ export const ProductScreen = () => {
     }, [dispatch, _id]);
 
     const [showModal, setShowModal] = useState(false);
+
 
     const handleClose = () => setShowModal(false);
     const handleShow = () => setShowModal(true);
@@ -116,7 +122,8 @@ export const ProductScreen = () => {
                         <Col md={5}>
                             <ListGroup variant="flush">
                                 <ListGroup.Item>
-                                    <Rating rating={product?.rating} numReviews={product.numReviews}/>
+                                    <Rating rating={product?.rating} numReviews={product.numReviews}
+                                            showNumReviews={true}/>
                                     <RecommendedPercentage rating={product?.rating}/>
                                 </ListGroup.Item>
                                 <ListGroup.Item>
@@ -209,6 +216,15 @@ export const ProductScreen = () => {
                         <Col md={9} className="my-5">
                             <h4>Descriere</h4>
                             <p>{product?.description}</p>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md={9} className="my-5">
+                            <h4 className="my-3">Recenzii</h4>
+                            <ReviewList productId={_id}/>
+                            <hr/>
+                            <h4>Adauga o recenzie</h4>
+                            <ReviewForm productId={_id}/>
                         </Col>
                     </Row>
                 </div>

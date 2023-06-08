@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Rating = void 0;
 const react_1 = __importDefault(require("react"));
-const Rating = ({ rating, numReviews }) => {
+const Rating = ({ rating, numReviews, showNumReviews }) => {
     rating = Number(rating);
     const renderStars = () => {
         const stars = [];
@@ -26,8 +26,8 @@ const Rating = ({ rating, numReviews }) => {
     return (react_1.default.createElement("div", { className: "mb-4 py-2", style: { height: "1.5rem" } },
         renderStars(),
         " ",
-        react_1.default.createElement("span", { className: "fw-semibold" }, rating),
-        react_1.default.createElement("span", { className: "text-secondary" },
+        showNumReviews && react_1.default.createElement("span", { className: "fw-semibold" }, rating),
+        showNumReviews && numReviews && react_1.default.createElement("span", { className: "text-secondary" },
             " (",
             numReviews,
             ")")));

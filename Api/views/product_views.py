@@ -3,8 +3,8 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
 
-from Api.models import Product
-from Api.serializers import ProductSerializer
+from Api.models import Product, Review
+from Api.serializers import ProductSerializer, ReviewSerializer
 
 from rest_framework import status
 
@@ -31,3 +31,53 @@ def get_product(request, _id):
         return Response({'detail': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({'detail': 'Error retrieving product'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_product_review(request, _id):
+    user = request.user
+    data = request.data
+    try:
+        product = Product.objects.get(_id=_id)
+        # 1 - Review already exists
+        already_exists = product.review_set.filter(user=user).exists()
+        if already_exists:
+            return Response({'detail': 'Produsul a fost deja recenzat'}, status=status.HTTP_400_BAD_REQUEST)
+        # 2 - No rating or 0
+        elif data['rating'] == 0:
+            return Response({'detail': 'Selecteaza un rating'}, status=status.HTTP_400_BAD_REQUEST)
+        # 3 - Create review
+        else:
+            review = Review.objects.create(
+                user=user,
+                product=product,
+                name=user.first_name if user.first_name else 'Anonim',
+                rating=data['rating'],
+                comment=data['comment']
+            )
+            reviews = product.review_set.all()
+            product.num_reviews = len(reviews)
+            total = 0
+            for i in reviews:
+                total += i.rating
+            product.rating = total / len(reviews)
+            product.save()
+            return Response('Review adaugat')
+    except ObjectDoesNotExist:
+        return Response({'detail': 'Produsul nu a fost gasit'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'detail': 'Eroare la adaugarea review-ului'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_product_reviews(request, _id):
+    try:
+        product = Product.objects.get(_id=_id)
+        reviews = product.review_set.all()
+        return Response(ReviewSerializer(reviews, many=True).data)
+    except ObjectDoesNotExist:
+        return Response({'detail': 'Produsul nu a fost gasit'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'detail': 'Eroare la cautarea review-urilor'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

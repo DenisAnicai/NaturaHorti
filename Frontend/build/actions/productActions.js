@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listProductDetails = exports.listProducts = void 0;
+exports.listProductReviews = exports.createProductReview = exports.listProductDetails = exports.listProducts = void 0;
 const productConstants_1 = require("../constants/productConstants");
 const axios_1 = __importDefault(require("axios"));
 const listProducts = () => (dispatch) => __awaiter(void 0, void 0, void 0, function* () {
@@ -43,3 +43,38 @@ const listProductDetails = (id) => (dispatch) => __awaiter(void 0, void 0, void 
     }
 });
 exports.listProductDetails = listProductDetails;
+const createProductReview = (productId, review) => (dispatch, getState) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        dispatch({ type: productConstants_1.CREATE_REVIEW_REQUEST });
+        const { userLogin: { userInfo } } = getState();
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        };
+        yield axios_1.default.post(`/api/products/${productId}/reviews/create`, review, config);
+        dispatch({ type: productConstants_1.CREATE_REVIEW_SUCCESS });
+    }
+    catch (error) {
+        dispatch({
+            type: productConstants_1.CREATE_REVIEW_FAIL,
+            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+        });
+    }
+});
+exports.createProductReview = createProductReview;
+const listProductReviews = (productId) => (dispatch) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        dispatch({ type: productConstants_1.LIST_REVIEWS_REQUEST });
+        const { data } = yield axios_1.default.get(`/api/products/${productId}/reviews`);
+        dispatch({ type: productConstants_1.LIST_REVIEWS_SUCCESS, payload: data });
+    }
+    catch (error) {
+        dispatch({
+            type: productConstants_1.LIST_REVIEWS_FAIL,
+            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+        });
+    }
+});
+exports.listProductReviews = listProductReviews;

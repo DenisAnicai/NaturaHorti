@@ -151,3 +151,33 @@ main {
   max-height: 1000px;
   transition: max-height 1s ease-in;
 }
+
+.review-list-item {
+    background-color: #f9f9f9;
+    border: 1px solid #e2e2e2;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.reviewer-name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.review-date {
+    font-size: 14px;
+    color: #666;
+}
+
+.review-comment {
+    margin-top: 10px;
+    font-size: 16px;
+}
+

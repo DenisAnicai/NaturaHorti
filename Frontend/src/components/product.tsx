@@ -32,7 +32,7 @@ export const Product: React.FC<ProductProp> = ({
 
                     <Card.Text as="div">
                         <div className="my-3">
-                            <Rating rating={rating} numReviews={numReviews}/>
+                            <Rating rating={rating} numReviews={numReviews} showNumReviews={true}/>
                         </div>
                     </Card.Text>
                     <Price price={Number(price)} textSize={0.9}/>

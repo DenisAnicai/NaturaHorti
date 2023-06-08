@@ -21,7 +21,7 @@ const Product = ({ _id, name, image, price, rating, numReviews, countInStock, })
                     react_1.default.createElement("strong", null, name)),
                 react_1.default.createElement(react_bootstrap_1.Card.Text, { as: "div" },
                     react_1.default.createElement("div", { className: "my-3" },
-                        react_1.default.createElement(rating_1.Rating, { rating: rating, numReviews: numReviews }))),
+                        react_1.default.createElement(rating_1.Rating, { rating: rating, numReviews: numReviews, showNumReviews: true }))),
                 react_1.default.createElement(price_1.Price, { price: Number(price), textSize: 0.9 }),
                 react_1.default.createElement("div", { className: "text-center mt-2", style: { fontSize: "0.8em" } }, countInStock > 0 ? (react_1.default.createElement("span", { style: { color: "#6cb95c" } },
                     react_1.default.createElement("i", { className: "fa-solid fa-boxes-stacked" }),
