@@ -38,6 +38,9 @@ const personalDetailsFromStorage: any = localStorage.getItem('personalDetails')
     ? JSON.parse(localStorage.getItem('personalDetails') as string)
     : { Name: '', Email: '', Phone: '' };
 
+const currentOrderFromStorage: any = localStorage.getItem('currentOrder') ?
+    JSON.parse(localStorage.getItem('currentOrder') as string) : null
+
 
 const middleware = [thunk]
 
@@ -53,6 +56,9 @@ export const store = configureStore({
         },
         userLogin: {
             userInfo: userInfoFromStorage
+        },
+        orderCreate: {
+            order: currentOrderFromStorage
         }
     },
     devTools: process.env.NODE_ENV !== 'production',

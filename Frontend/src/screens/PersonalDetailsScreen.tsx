@@ -3,8 +3,9 @@ import {useSelector, useDispatch} from 'react-redux';
 import {Row, Col, Card, Button, Container, Form} from 'react-bootstrap';
 import styled from 'styled-components';
 import {Steps} from "../components/step";
-import {updatePersonalDetails} from "../actions/cartActions";
+import {clearCart, updatePersonalDetails} from "../actions/cartActions";
 import {useNavigate} from "react-router-dom";
+import {resetOrder} from "../actions/orderActions";
 
 const StyledContainer = styled(Container)`
   font-family: 'Arial', sans-serif;
@@ -40,6 +41,18 @@ export const PersonalDetailsScreen: React.FC = () => {
         const [name, setName] = useState(personalDetails.name ? personalDetails.name : userInfo ? userInfo.name : '');
         const [email, setEmail] = useState(personalDetails.email ? personalDetails.email : userInfo ? userInfo.email : '');
         const [phone, setPhone] = useState(personalDetails.phone ? personalDetails.phone : '');
+
+
+        const orderCreate = useSelector((state: any) => state.orderCreate);
+        const {order, success, error} = orderCreate;
+
+        useEffect(() => {
+            if (order) {
+                dispatch<any>(clearCart());
+                dispatch<any>(resetOrder());
+                navigate(`/cart/order/${order._id}`);
+            }
+        }, [navigate, order, dispatch]);
 
         const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();

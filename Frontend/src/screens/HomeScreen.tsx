@@ -5,7 +5,8 @@ import {listProducts} from '../actions/productActions'
 import {ProductProp} from "../utils/props";
 import {useDispatch, useSelector} from 'react-redux'
 import styled from "styled-components";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {resetOrderAll} from "../actions/orderActions";
 
 import {logout} from "../actions/userActions";
 
@@ -36,9 +37,14 @@ export const HomeScreen = () => {
 
     const location = useLocation();
 
+    const orderCreate = useSelector((state: any) => state.orderCreate);
+    const {order} = orderCreate;
+
     useEffect(() => {
-            if (location.pathname.endsWith('logout'))
-            {
+            if (order) {
+                dispatch<any>(resetOrderAll());
+            }
+            if (location.pathname.endsWith('logout')) {
                 dispatch<any>(logout());
                 alert('Deconectare cu succes!')
                 navigate('/')

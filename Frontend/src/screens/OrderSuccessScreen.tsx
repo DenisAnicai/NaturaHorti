@@ -1,12 +1,13 @@
 import React, {useEffect} from 'react';
-import {Card, Button, ListGroup, Image} from 'react-bootstrap';
+import {Card, Button, ListGroup, Image, Alert, Spinner} from 'react-bootstrap';
 import {motion} from 'framer-motion';
 import {useNavigate, useParams} from 'react-router-dom';
 import styled, {createGlobalStyle} from 'styled-components';
 import {useSelector} from "react-redux";
 import {useDispatch} from "react-redux";
-import {resetOrderAll} from "../actions/orderActions";
-import {clearCart} from "../actions/cartActions";
+import {payOrder, resetOrderAll, resetPayOrder, } from "../actions/orderActions";
+import {PayPalButton} from "react-paypal-button-v2";
+
 
 const StyledCard = styled(Card)`
   background-color: #ffffff;
@@ -73,20 +74,59 @@ interface Item {
 export const OrderSuccessScreen: React.FC<any> = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [sdkReady, setSdkReady] = React.useState(false);
     const {orderId} = useParams<{ orderId: string }>();
     const orderDetails = useSelector((state: any) => state.orderCreate.order);
 
+
+    const orderPay = useSelector((state: any) => state.orderPay);
+    const {loading: loadingPay, success: successPay} = orderPay;
+
+
+    const addPayPalScript = () => {
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://www.paypal.com/sdk/js?client-id=AZ0WtPQoBPJFuf3AF8-d5OsyAZ9Th83HzypjNqXHeC4SifJW0K19xLi-zPKktlIs_IsBheDLzAt9p20R&currency=EUR';
+        script.async = true;
+        script.onload = () => {
+            setSdkReady(true);
+        }
+        document.body.appendChild(script);
+    }
+    const [paypalSuccess, setPaypalSuccess] = React.useState(false);
 
     useEffect(() => {
         if (orderDetails === undefined) {
             navigate('/');
         }
-        const timer = setTimeout(() => {
-            dispatch<any>(resetOrderAll());
-            navigate('/');
-        }, 30000);
-        return () => clearTimeout(timer);
-    }, [navigate, orderDetails]);
+
+        if (orderDetails && orderDetails.paymentMethod === 'PayPal') {
+            if (successPay) {
+                setPaypalSuccess(true)
+                dispatch<any>(resetPayOrder());
+
+            } else if (!paypalSuccess) {
+                if (!window.paypal) {
+                    addPayPalScript();
+                } else {
+                    setSdkReady(true);
+                }
+            }
+
+            if (paypalSuccess) {
+                console.log('paypalSuccess')
+                const timer = setTimeout(() => {
+                    handleHomeClick();
+                }, 2000);
+                return () => clearTimeout(timer);
+            }
+        }
+
+    }, [navigate, orderDetails, successPay, dispatch, paypalSuccess]);
+
+    const successPaymentHandler = (paymentResult: any) => {
+        dispatch<any>(payOrder(orderDetails._id, paymentResult));
+    }
 
     const animationVariants = {
         hidden: {scale: 0},
@@ -111,7 +151,10 @@ export const OrderSuccessScreen: React.FC<any> = () => {
                     <Card.Body>
                         <Card.Title>Comanda reușită</Card.Title>
                         <Card.Text>Comanda ta cu ID-ul: {orderId} a fost plasată cu succes.</Card.Text>
-                        <Card.Text>Vei fi redirecționat către pagina principală în 30 de secunde...</Card.Text>
+                        <Card.Text>Aceasta va fi procesata si livrata odata ce plata a fost confirmata.</Card.Text>
+                        <Card.Text>Apasa pe butonul de mai jos pentru a efectua plata pe platforma PayPal.</Card.Text>
+                        <Card.Text className="text-info">Suma totala de achitat va fi convertita in EURO la
+                            cursul zilei.</Card.Text>
 
                         <SummarySection>
                             <h4>Rezumatul comenzii:</h4>
@@ -143,8 +186,29 @@ export const OrderSuccessScreen: React.FC<any> = () => {
                                 <span>{orderDetails && orderDetails.totalPrice} Lei</span>
                             </SummaryItem>
                         </SummarySection>
+                        <hr/>
+                        {!paypalSuccess && orderDetails && orderDetails.paymentMethod === 'PayPal' && (
+                            <div>
+                                {!sdkReady ? (
+                                    <Spinner animation="border" role="status">
+                                        <span className="sr-only">PayPal se încarcă...</span>
+                                    </Spinner>
+                                ) : (
+                                    <PayPalButton
+                                        amount={orderDetails.totalPrice}
+                                        currency="EUR"
+                                        onSuccess={successPaymentHandler}
+                                    />
+                                )}
+                            </div>
+                        )}
+                        {orderDetails && orderDetails.paymentMethod === 'PayPal' && loadingPay &&
+                          <Alert variant="info">Se efectuează plata...</Alert>}
+                        {orderDetails && orderDetails.paymentMethod === 'PayPal' && paypalSuccess &&
+                          <Alert variant="success">Plata a fost efectuată cu succes!</Alert>}
 
-                        <StyledButton className="mt-3 mb-1" variant="primary" onClick={handleHomeClick}>Mergi Acum Acasă</StyledButton>
+                        <StyledButton className="mt-3 mb-1" variant="primary" onClick={handleHomeClick}>Mergi Acum
+                            Acasă</StyledButton>
                     </Card.Body>
                 </StyledCard>
             </motion.div>

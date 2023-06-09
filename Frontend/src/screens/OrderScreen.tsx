@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {Row, Col, Card, Container, Button, ListGroup} from 'react-bootstrap';
+import {Row, Col, Card, Container, Button, ListGroup, Alert, Spinner} from 'react-bootstrap';
 import styled from 'styled-components';
 import {Price} from '../components/price';
 import {Steps} from "../components/step";
@@ -52,11 +52,9 @@ const StyledButton = styled(Button)`
     background-color: #36a029;
   }
 `;
-
 export const OrderSummaryScreen: React.FC = () => {
         const dispatch = useDispatch();
         const navigate = useNavigate();
-
 
         const cart = useSelector((state: any) => state.cart);
         const {cartItems, shippingAddress, paymentMethod, personalDetails} = cart;
@@ -69,15 +67,15 @@ export const OrderSummaryScreen: React.FC = () => {
         const totalPrice = itemsPrice + shippingPrice + vatPrice;
 
         const orderCreate = useSelector((state: any) => state.orderCreate);
-        const {order, success, error} = orderCreate;
+        const {order, success, error, loading} = orderCreate;
 
         useEffect(() => {
-            if (success && order) {
+            if (order) {
                 dispatch<any>(clearCart());
                 dispatch<any>(resetOrder());
                 navigate(`/cart/order/${order._id}`);
             }
-        }, [navigate, success, order, dispatch]);
+        }, [navigate, order, dispatch]);
 
         const placeOrderHandler = () => {
             dispatch<any>(saveOrder({
@@ -112,7 +110,7 @@ export const OrderSummaryScreen: React.FC = () => {
                                     {cartItems.map((item: any, index: number) => (
                                         <div key={index}>
                                             {item.name} - {item.qty} bucati <span><Price price={item.price * item.qty}
-                                                                                            textSize={0.6}/></span>
+                                                                                         textSize={0.6}/></span>
                                         </div>
                                     ))}
                                     <hr/>
@@ -135,8 +133,12 @@ export const OrderSummaryScreen: React.FC = () => {
                                           onClick={placeOrderHandler}>
                                 <i className='fas fa-check'></i> Confirmare Comanda
                             </StyledButton>
-                            {error ? (
-                                <div className='alert alert-danger mt-3'>{error}</div>
+                            {loading ? (
+                                <Alert variant="info" className="mt-3">
+                                    <Spinner animation="border" size="sm"/> Procesam comanda...
+                                </Alert>
+                            ) : error ? (
+                                <Alert variant='danger' className="mt-3">{error}</Alert>
                             ) : (
                                 <></>
                             )}
