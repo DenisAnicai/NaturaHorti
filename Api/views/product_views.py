@@ -64,7 +64,7 @@ def create_product_review(request, _id):
                 comment=data.get('comment', '')
             )
             reviews = product.review_set.all()
-            product.num_reviews = len(reviews)
+            product.numReviews = len(reviews)
             total = 0
             for i in reviews:
                 total += i.rating
