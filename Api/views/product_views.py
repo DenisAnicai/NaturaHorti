@@ -17,7 +17,7 @@ def get_products(request):
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
     except Exception as e:
-        return Response({'detail': 'Error retrieving products'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({'detail': 'Eroare la recuperarea produselor'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['GET'])
@@ -28,9 +28,9 @@ def get_product(request, _id):
         serializer = ProductSerializer(product, many=False)
         return Response(serializer.data)
     except ObjectDoesNotExist:
-        return Response({'detail': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'detail': 'Produsul nu a fost găsit'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        return Response({'detail': 'Error retrieving product'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({'detail': 'Eroare la recuperarea produsului'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['POST'])
@@ -39,6 +39,13 @@ def create_product_review(request, _id):
     user = request.user
     data = request.data
     try:
+        if not data:
+            return Response({'detail': 'Lipsa date'}, status=status.HTTP_400_BAD_REQUEST)
+        if not data['rating']:
+            return Response({'detail': 'Completați toate câmpurile'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not user:
+            return Response({'detail': 'Trebuie să fiți logat pentru a adăuga un review'}, status=status.HTTP_401_UNAUTHORIZED)
         product = Product.objects.get(_id=_id)
         # 1 - Review already exists
         already_exists = product.review_set.filter(user=user).exists()
@@ -54,7 +61,7 @@ def create_product_review(request, _id):
                 product=product,
                 name=user.first_name if user.first_name else 'Anonim',
                 rating=data['rating'],
-                comment=data['comment']
+                comment=data.get('comment', '')
             )
             reviews = product.review_set.all()
             product.num_reviews = len(reviews)

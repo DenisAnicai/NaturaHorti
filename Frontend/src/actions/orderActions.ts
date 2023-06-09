@@ -40,8 +40,7 @@ export const saveOrder = (order: any) => async (dispatch: any, getState: any) =>
         (error: any) {
         dispatch({
             type: ORDER_CREATE_FAIL,
-            payload: error.response && error.response.data.message ? error.response.data.message : error.message
-        });
+            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message });
     }
 }
 
@@ -79,8 +78,7 @@ export const listOrders = (page: number, limit: number) => async (dispatch: any,
         (error: any) {
         dispatch({
             type: ORDER_LIST_FAIL,
-            payload: error.response && error.response.data.message ? error.response.data.message : error.message
-        });
+            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message });
     }
 }
 
@@ -110,7 +108,6 @@ export const payOrder = (orderId: string, paymentResult: any) => async (dispatch
         (error: any) {
         dispatch({
             type: ORDER_PAY_FAIL,
-            payload: error.response && error.response.data.message ? error.response.data.message : error.message
-        });
+            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message });
     }
 }

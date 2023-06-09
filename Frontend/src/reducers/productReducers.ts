@@ -8,6 +8,7 @@ import {
     CREATE_REVIEW_FAIL,
     CREATE_REVIEW_REQUEST,
     CREATE_REVIEW_SUCCESS,
+    CREATE_REVIEW_RESET,
     LIST_REVIEWS_FAIL,
     LIST_REVIEWS_REQUEST,
     LIST_REVIEWS_SUCCESS
@@ -47,6 +48,8 @@ export const productReviewCreateReducer = (state = {}, action: any) => {
           return { loading: false, success: true };
       case CREATE_REVIEW_FAIL:
           return { loading: false, error: action.payload };
+        case CREATE_REVIEW_RESET:
+            return {};
       default:
           return state;
     }

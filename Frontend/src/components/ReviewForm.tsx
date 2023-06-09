@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert, Spinner, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { createProductReview, listProductReviews } from '../actions/productActions';
+import { createProductReview, listProductReviews, resetCreateReview } from '../actions/productActions';
+import { useEffect } from 'react';
 
 const ReviewForm = ({ productId }: { productId: string }) => {
     const [rating, setRating] = useState(0);
@@ -12,19 +13,28 @@ const ReviewForm = ({ productId }: { productId: string }) => {
     const productReviewCreate = useSelector((state: any) => state.productReviewCreate);
     const { error, loading } = productReviewCreate;
 
+
+    useEffect(() => {
+        dispatch<any>(resetCreateReview());
+    }, [dispatch]);
+
     const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (rating === 0) {
+            alert('Selectati o evaluare');
+            return;
+        }
         try {
             await dispatch<any>(createProductReview(productId, { 'rating': rating, 'comment': comment }));
             dispatch<any>(listProductReviews(productId));
         } catch (error) {
-            console.error(error);
+
         }
     };
 
     return (
         <Card className='my-4'>
-            <Card.Header as="h5">Adauga o recenzie</Card.Header>
+            <Card.Header as="h5">Ce părere aveți despre acest produs?</Card.Header>
             <Card.Body>
                 {loading &&
                     <Spinner animation="border" role="status">

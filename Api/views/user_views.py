@@ -2,7 +2,6 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
 from django.contrib.auth.password_validation import validate_password
-from rest_framework import status
 
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db import IntegrityError
@@ -31,13 +30,11 @@ def register_user(request):
         serializer = UserSerializerWithToken(user, many=False)
         return Response(serializer.data)
     except IntegrityError:
-        message = {'detail': 'Exista deja un utilizator cu acest email'}
-        return Response(message, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail': 'Exista deja un utilizator cu acest email'}, status=status.HTTP_400_BAD_REQUEST)
     except ValidationError as e:
         return Response(e.messages, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
-        message = {'detail': f'Ceva nu a mers bine. Incearca din nou mai tarziu. {e}'}
-        return Response(message, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({'detail': f'Ceva nu a mers bine. Incearca din nou mai tarziu. {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['PUT'])

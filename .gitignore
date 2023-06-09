@@ -60,3 +60,6 @@ Desktop.ini
 *.tmp
 nbproject/
 .env
+Frontend/build
+Frontend/static/frontend/
+/Api/migrations/

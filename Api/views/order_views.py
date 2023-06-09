@@ -90,7 +90,7 @@ def add_order_items(request):
         except ValidationError as e:
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            return Response({'detail': 'Error in order processing'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'detail': 'Eroare la crearea comenzii'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -103,14 +103,14 @@ def get_all_orders(request):
     page = request.query_params.get('page')
 
     if not limit or not page:
-        raise ParseError("Page and limit parameters are required")
+        raise ParseError("Parametrii limit si page sunt obligatorii")
 
     # Pagination
     paginator = Paginator(orders, limit)
     try:
         orders = paginator.page(page)
     except PageNotAnInteger:
-        raise ParseError("Page parameter must be an integer")
+        raise ParseError("Parametrul page trebuie sa fie un numar intreg")
     except EmptyPage:
         orders = paginator.page(paginator.num_pages)
 
