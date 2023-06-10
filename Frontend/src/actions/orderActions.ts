@@ -11,6 +11,9 @@ import {
     ORDER_PAY_REQUEST,
     ORDER_PAY_SUCCESS,
     ORDER_PAY_RESET,
+    ORDER_GET_REQUEST,
+    ORDER_GET_SUCCESS,
+    ORDER_GET_FAIL,
 } from "../constants/orderConstants";
 import axios from "axios";
 
@@ -36,7 +39,6 @@ export const saveOrder = (order: any) => async (dispatch: any, getState: any) =>
         const {data} = await axios.post("/api/orders/add", order, config);
 
         dispatch({type: ORDER_CREATE_SUCCESS, payload: data});
-        localStorage.setItem("currentOrder", JSON.stringify(data));
     } catch
         (error: any) {
         dispatch({
@@ -51,7 +53,6 @@ export const resetOrder = () => (dispatch: any) => {
 
 export const resetOrderAll = () => (dispatch: any) => {
     dispatch({type: ORDER_RESET_ALL});
-    localStorage.removeItem("currentOrder");
 }
 
 export const listOrders = (page: number, limit: number) => async (dispatch: any, getState: any) => {
@@ -116,4 +117,34 @@ export const payOrder = (orderId: string, paymentResult: any) => async (dispatch
 
 export const resetPayOrder = () => (dispatch: any) => {
     dispatch({type: ORDER_PAY_RESET});
+}
+
+export const getOrder = (orderId: string) => async (dispatch: any, getState: any) => {
+    try {
+        dispatch({type: ORDER_GET_REQUEST});
+        let config: any = {};
+        if (getState().userLogin.userInfo) {
+            config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${getState().userLogin.userInfo.token}`,
+                }
+            }
+        } else {
+            config = {
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            }
+        }
+
+        const {data} = await axios.get(`/api/orders/${orderId}`, config);
+
+        dispatch({type: ORDER_GET_SUCCESS, payload: data});
+    } catch
+        (error: any) {
+        dispatch({
+            type: ORDER_GET_FAIL,
+            payload: error.response && error.response.data.detail ? error.response.data.detail : error.message });
+    }
 }

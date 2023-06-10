@@ -7,7 +7,7 @@ import { cartReducer } from './reducers/cartReducers'
 import {userLoginReducer, userRegisterReducer, userUpdateReducer} from "./reducers/userReducers";
 
 import { CartItemProp, ShippingAddressProp} from "./utils/props";
-import { orderCreateReducer, orderListReducer, orderPayReducer} from "./reducers/orderReducers";
+import { orderCreateReducer, orderListReducer, orderPayReducer, orderGetReducer} from "./reducers/orderReducers";
 
 const rootReducer = combineReducers({
     productList: productListReducer,
@@ -21,6 +21,7 @@ const rootReducer = combineReducers({
     orderPay: orderPayReducer,
     productReviewCreate: productReviewCreateReducer,
     productReviewsList: productReviewsListReducer,
+    orderGet: orderGetReducer
 })
 
 const cartItemsFromStorage: [CartItemProp] = localStorage.getItem('cartItems') ?
@@ -38,9 +39,6 @@ const personalDetailsFromStorage: any = localStorage.getItem('personalDetails')
     ? JSON.parse(localStorage.getItem('personalDetails') as string)
     : { Name: '', Email: '', Phone: '' };
 
-const currentOrderFromStorage: any = localStorage.getItem('currentOrder') ?
-    JSON.parse(localStorage.getItem('currentOrder') as string) : null
-
 
 const middleware = [thunk]
 
@@ -56,9 +54,6 @@ export const store = configureStore({
         },
         userLogin: {
             userInfo: userInfoFromStorage
-        },
-        orderCreate: {
-            order: currentOrderFromStorage
         }
     },
     devTools: process.env.NODE_ENV !== 'production',

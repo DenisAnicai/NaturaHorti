@@ -3,6 +3,7 @@ import {Button, Card, Container, Form, Row, Col, Alert, Pagination} from "react-
 import {useDispatch, useSelector} from 'react-redux';
 import {update} from '../actions/userActions';
 import {listOrders} from '../actions/orderActions';
+import {useNavigate} from "react-router-dom";
 
 
 export const ProfileScreen: React.FC = () => {
@@ -31,6 +32,7 @@ export const ProfileScreen: React.FC = () => {
     const [limit, setLimit] = useState<number>(3);
     const [expandedOrders, setExpandedOrders] = useState<{ [key: string]: boolean }>({});
 
+    const navigate = useNavigate();
 
     useEffect(() => {
             if (userInfo) {
@@ -97,6 +99,11 @@ export const ProfileScreen: React.FC = () => {
             [orderId]: !prev[orderId],
         }));
     };
+
+
+    const handlePayNow = (order: any) => {
+        navigate(`/cart/order/${order._id}`)
+    }
 
     return (
         <Container className="my-5">
@@ -199,29 +206,43 @@ export const ProfileScreen: React.FC = () => {
                                             <Button onClick={() => toggleOrder(order._id)}>
                                                 {expandedOrders[order._id] ? 'Hide Details' : 'Show Details'}
                                             </Button>
+                                            {!order.isPaid && order.paymentMethod === 'PayPal' && (
+                                                <span>
+                                                    <Button
+                                                        className="mx-2"
+                                                        onClick={() => handlePayNow(order)}
+                                                    >
+                                                        Plateste acum
+                                                    </Button>
+                                                    <i className="fa-solid fa-triangle-exclamation" style={{color: "red"}}/>
+                                                </span>
+                                            )}
                                             {expandedOrders[order._id] && (
-                                            <Card.Text>
-                                                <strong>Nume: </strong>{order.user.name}<br/>
-                                                <strong>Address: </strong>{order.shippingAddress.address}<br/>
-                                                <strong>Pret total: </strong>{order.totalPrice} Lei<br/>
-                                                <strong>Metoda de plata: </strong>{order.paymentMethod}<br/>
-                                                <strong>Comanda platita: </strong>{order.isPaid ? 'Da' : 'Nu'}<br/>
-                                                <strong>Comanda livrata: </strong>{order.isDelivered ? 'Da' : 'Nu'}<br/>
-                                                <strong>Plasata
-                                                    la: </strong>{new Date(order.createdAt).toLocaleString()}<br/>
-                                            </Card.Text>)}
+                                                <Card.Text>
+                                                    <strong>Nume: </strong>{order.user.name}<br/>
+                                                    <strong>Address: </strong>{order.shippingAddress.address}<br/>
+                                                    <strong>Pret total: </strong>{order.totalPrice} Lei<br/>
+                                                    <strong>Metoda de plata: </strong>{order.paymentMethod}<br/>
+                                                    <strong>Comanda platita: </strong>{order.isPaid ? 'Da' : 'Nu'}<br/>
+                                                    <strong>Comanda
+                                                        livrata: </strong>{order.isDelivered ? 'Da' : 'Nu'}<br/>
+                                                    <strong>Plasata
+                                                        la: </strong>{new Date(order.createdAt).toLocaleString()}<br/>
+                                                </Card.Text>)}
                                         </Card.Body>
                                         {expandedOrders[order._id] && (
-                                        <Card.Footer>
-                                            <h6>Produse</h6>
-                                            {order.items.map((item: any) => (
-                                                <div key={item._id}>
-                                                    <strong>Nume: </strong>{item.name}<br/>
-                                                    <strong>Cantitate: </strong>{item.qty}<br/>
-                                                    <strong>Pret: </strong>{item.price}<br/>
-                                                </div>
-                                            ))}
-                                        </Card.Footer>)}
+                                            <Card.Footer>
+                                                <h6>Produse</h6>
+                                                {order.items.map((item: any) => (
+                                                    <div key={item._id}>
+                                                        <strong>Nume: </strong>{item.name}<br/>
+                                                        <strong>Cantitate: </strong>{item.qty}<br/>
+                                                        <strong>Pret: </strong>{item.price}<br/>
+                                                    </div>
+                                                ))}
+
+
+                                            </Card.Footer>)}
                                     </Card>
                                 ))}
 

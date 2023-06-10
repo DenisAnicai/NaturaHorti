@@ -4,7 +4,7 @@ import {Row, Col, Card, Container, Button, ListGroup, Alert, Spinner} from 'reac
 import styled from 'styled-components';
 import {Price} from '../components/price';
 import {Steps} from "../components/step";
-import {saveOrder} from "../actions/orderActions";
+import {resetOrderAll, saveOrder} from "../actions/orderActions";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 
@@ -72,7 +72,7 @@ export const OrderSummaryScreen: React.FC = () => {
         useEffect(() => {
             if (order) {
                 dispatch<any>(clearCart());
-                dispatch<any>(resetOrder());
+                dispatch<any>(resetOrderAll());
                 navigate(`/cart/order/${order._id}`);
             }
         }, [navigate, order, dispatch]);
