@@ -40,7 +40,7 @@ export const LoginScreen: React.FC = () => {
             <Row className="justify-content-md-center">
                 <Col xs={12} md={6}>
                     <Card className="p-4">
-                        <h3 className="text-center mb-4">Login</h3>
+                        <h3 className="text-center mb-4">Autentificare</h3>
                         {loading ? (
                             <div className="text-center">
                                 <i className="fa-solid fa-spinner fa-spin"
@@ -60,7 +60,7 @@ export const LoginScreen: React.FC = () => {
                                 <Form.Label>Email</Form.Label>
                                 <Form.Control
                                     type="email"
-                                    placeholder="Enter email"
+                                    placeholder="Introdu email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
@@ -68,7 +68,7 @@ export const LoginScreen: React.FC = () => {
                             </Form.Group>
 
                             <Form.Group className="mb-3">
-                                <Form.Label>Password</Form.Label>
+                                <Form.Label>Parola</Form.Label>
                                 <Form.Control
                                     type="password"
                                     placeholder="Password"
@@ -78,7 +78,7 @@ export const LoginScreen: React.FC = () => {
                                 />
                             </Form.Group>
                             <Button variant="primary" type="submit" className="w-100">
-                                Login
+                                Autentificare
                             </Button>
                         </Form>
                     </Card>

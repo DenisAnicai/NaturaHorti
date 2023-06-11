@@ -35,7 +35,7 @@ export const RegisterScreen: React.FC = () => {
         }
         if (success) {
             setErrorMsg(initialErrors);
-            setSuccessMsg('Registration was successful!');
+            setSuccessMsg('Inregistrare cu succes!');
         }
     }, [navigate, userInfo, success, error]);
 
@@ -45,25 +45,23 @@ export const RegisterScreen: React.FC = () => {
         let errors = {...initialErrors};
 
         if (name.length < 3) {
-            errors.name = 'Name must be at least 3 characters long!';
+            errors.name = 'Numele trebuie sa aiba cel putin 3 caractere!';
         }
 
         if (email.length < 3) {
-            errors.email = 'Email must be at least 3 characters long!';
+            errors.email = 'Email-ul trebuie sa aiba cel putin 3 caractere!';
         }
 
         if (password.length < 8) {
-            errors.password = 'Password must be at least 8 characters long!';
+            errors.password = 'Parola trebuie sa aiba cel putin 8 caractere!';
         }
 
         if (password !== confirmPassword) {
-            errors.confirmPassword = 'Passwords do not match!';
+            errors.confirmPassword = 'Parolele nu se potrivesc!';
         }
 
         if (!Object.values(errors).some((error) => error !== '')) {
             try {
-                console.log('register')
-                console.log(name, email, password)
                 dispatch<any>(register(name, email, password));
             } catch (err: any) {
 
@@ -90,7 +88,7 @@ export const RegisterScreen: React.FC = () => {
                         ))}
                         <Form onSubmit={handleRegister}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Name</Form.Label>
+                                <Form.Label>Nume</Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Enter Name"
@@ -118,7 +116,7 @@ export const RegisterScreen: React.FC = () => {
                             </Form.Group>
 
                             <Form.Group className="mb-3">
-                                <Form.Label>Password</Form.Label>
+                                <Form.Label>Parola</Form.Label>
                                 <Form.Control
                                     type="password"
                                     placeholder="Password"
@@ -134,7 +132,7 @@ export const RegisterScreen: React.FC = () => {
                             </Form.Group>
 
                             <Form.Group className="mb-3">
-                                <Form.Label>Confirm Password</Form.Label>
+                                <Form.Label>Confirma parola</Form.Label>
                                 <Form.Control
                                     type="password"
                                     placeholder="Confirm Password"
@@ -151,7 +149,7 @@ export const RegisterScreen: React.FC = () => {
                             </Form.Group>
 
                             <Button variant="primary" type="submit" className="w-100" disabled={loading}>
-                                {loading ? 'Loading...' : 'Register'}
+                                {loading ? 'Se incarca' : 'Inregistrare'}
                             </Button>
                         </Form>
                     </Card>
